@@ -1,0 +1,73 @@
+# =============================================================================
+# Update README with Dynamic Content
+# =============================================================================
+# This GitHub Actions workflow keeps your profile README fresh by automatically
+# updating sections with live data from GitHub. It runs on a schedule (every
+# 6 hours) and can also be triggered manually from the Actions tab.
+#
+# What it does:
+#   1. Checks out your repository
+#   2. Fetches your latest GitHub activity (pushes, PRs, issues, stars, etc.)
+#      and injects it into the "Recent Activity" section of README.md
+#   3. Updates the "Last updated" timestamp at the bottom of the README
+#   4. Commits and pushes changes ONLY if something actually changed
+#
+# The workflow uses GITHUB_TOKEN which is automatically provided by GitHub —
+# no extra secrets need to be configured.
+# =============================================================================
+
+name: Update README with Dynamic Content
+
+on:
+  schedule:
+    # Cron expression: minute(0) hour(every 6th) day(*) month(*) weekday(*)
+    # This means the workflow runs at 00:00, 06:00, 12:00, and 18:00 UTC daily
+    - cron: "0 */6 * * *"
+
+  # Allows you to manually trigger this workflow from the GitHub Actions tab
+  # (go to Actions > "Update README with Dynamic Content" > "Run workflow")
+  workflow_dispatch:
+
+# Grant write access to repository contents so the workflow can commit changes
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+
+      # Step 1: Check out the repository so we can read and modify README.md
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Step 2: Update the "Recent Activity" section in README.md
+      # This action reads your recent GitHub events (e.g. pushed commits,
+      # opened PRs/issues, starred repos) and writes them as a bullet list
+      # between the <!--START_SECTION:activity--> and <!--END_SECTION:activity-->
+      # markers in your README.md. MAX_LINES controls how many items to show.
+      - name: Update recent GitHub activity
+        uses: jamesgeorge007/github-activity-readme@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          COMMIT_MSG: "chore: update recent activity section"
+          MAX_LINES: 5
+
+      # Step 3: Update the "Last updated" timestamp at the bottom of README.md
+      # This replaces the text between the LAST_UPDATED_START and
+      # LAST_UPDATED_END HTML comments with the current date/time in UTC.
+      - name: Update last-updated timestamp
+        run: |
+          TIMESTAMP=$(date -u '+%B %d, %Y %H:%M UTC')
+          sed -i "s|<!-- LAST_UPDATED_START -->.*<!-- LAST_UPDATED_END -->|<!-- LAST_UPDATED_START -->${TIMESTAMP}<!-- LAST_UPDATED_END -->|" README.md
+
+      # Step 4: Commit and push if there were any changes
+      # "git diff --quiet" exits with code 1 if there are changes, so the
+      # commands after || only run when the README was actually modified.
+      # This prevents empty/no-op commits from cluttering your history.
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git diff --quiet README.md || (git add README.md && git commit -m "chore: update README dynamic content" && git push)
