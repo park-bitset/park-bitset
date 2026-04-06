@@ -47,27 +47,24 @@ jobs:
       # between the <!--START_SECTION:activity--> and <!--END_SECTION:activity-->
       # markers in your README.md. MAX_LINES controls how many items to show.
       - name: Update recent GitHub activity
-        uses: jamesgeorge007/github-activity-readme@master
+        uses: jamesgeorge007/github-activity-readme@4aefbfa1c222d70537dc6a02f0519266aab2b1ea # master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           COMMIT_MSG: "chore: update recent activity section"
           MAX_LINES: 5
 
-      # Step 3: Update the "Last updated" timestamp at the bottom of README.md
-      # This replaces the text between the LAST_UPDATED_START and
-      # LAST_UPDATED_END HTML comments with the current date/time in UTC.
-      - name: Update last-updated timestamp
-        run: |
-          TIMESTAMP=$(date -u '+%B %d, %Y %H:%M UTC')
-          sed -i "s|<!-- LAST_UPDATED_START -->.*<!-- LAST_UPDATED_END -->|<!-- LAST_UPDATED_START -->${TIMESTAMP}<!-- LAST_UPDATED_END -->|" README.md
-
-      # Step 4: Commit and push if there were any changes
+      # Step 3: Update timestamp and commit only if the activity section changed
       # "git diff --quiet" exits with code 1 if there are changes, so the
-      # commands after || only run when the README was actually modified.
-      # This prevents empty/no-op commits from cluttering your history.
+      # timestamp update and commit only run when the README was actually
+      # modified by the activity step. This prevents empty/no-op commits
+      # from cluttering your history.
       - name: Commit and push changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git diff --quiet README.md || (git add README.md && git commit -m "chore: update README dynamic content" && git push)
+          if ! git diff --quiet README.md; then
+            TIMESTAMP=$(date -u '+%B %d, %Y %H:%M UTC')
+            sed -i "s|<!-- LAST_UPDATED_START -->.*<!-- LAST_UPDATED_END -->|<!-- LAST_UPDATED_START -->${TIMESTAMP}<!-- LAST_UPDATED_END -->|" README.md
+            git add README.md && git commit -m "chore: update README dynamic content" && git push
+          fi
