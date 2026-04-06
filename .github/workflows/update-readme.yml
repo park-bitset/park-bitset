@@ -1,0 +1,36 @@
+name: Update README with Dynamic Content
+
+on:
+  schedule:
+    # Runs every 6 hours
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update recent GitHub activity
+        uses: jamesgeorge007/github-activity-readme@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          COMMIT_MSG: "chore: update recent activity section"
+          MAX_LINES: 5
+
+      - name: Update last-updated timestamp
+        run: |
+          TIMESTAMP=$(date -u '+%B %d, %Y %H:%M UTC')
+          sed -i "s|<!-- LAST_UPDATED_START -->.*<!-- LAST_UPDATED_END -->|<!-- LAST_UPDATED_START -->${TIMESTAMP}<!-- LAST_UPDATED_END -->|" README.md
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git diff --quiet README.md || (git add README.md && git commit -m "chore: update README dynamic content" && git push)
