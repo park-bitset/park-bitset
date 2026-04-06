@@ -14,26 +14,33 @@
 
 - 🏢 Member of **株式会社bitset**
 - 💻 Passionate about building great software
+- 🔬 Experience in **CFD (Computational Fluid Dynamics)** with MPI-based parallel computing on supercomputers
 - 🌱 Always learning and exploring new technologies
 - 🤝 Open to collaboration on interesting projects
 
 ### Tech Stack
 
-<!-- Update these badges to match your actual skills -->
-
 **Languages**
 
+![C#](https://img.shields.io/badge/-C%23-239120?style=flat-square&logo=csharp&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![Go](https://img.shields.io/badge/-Go-00ADD8?style=flat-square&logo=go&logoColor=white)
 
-**Frameworks & Tools**
+**Frameworks & Desktop**
 
+![WPF](https://img.shields.io/badge/-WPF-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![Avalonia](https://img.shields.io/badge/-Avalonia_UI-8B44AC?style=flat-square&logo=dotnet&logoColor=white)
+![LINQ](https://img.shields.io/badge/-LINQ-512BD4?style=flat-square&logo=dotnet&logoColor=white)
 ![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat-square&logo=next.js&logoColor=white)
 ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+
+**HPC & Scientific Computing**
+
+![MPI](https://img.shields.io/badge/-MPI-003366?style=flat-square&logoColor=white)
+![CFD](https://img.shields.io/badge/-CFD-0066CC?style=flat-square&logoColor=white)
 
 **Cloud & Infrastructure**
 
