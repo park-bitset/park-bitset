@@ -61,7 +61,7 @@
 ### Recent Activity
 
 <!--START_SECTION:activity-->
-<!-- This section is automatically updated by GitHub Actions -->
+1. 🎉 Merged PR [#1](https://github.com/park-bitset/park-bitset/pull/1) in [park-bitset/park-bitset](https://github.com/park-bitset/park-bitset)
 <!--END_SECTION:activity-->
 
 ### Latest Blog Posts
